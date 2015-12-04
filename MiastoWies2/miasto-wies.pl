@@ -24,9 +24,11 @@ powinien_mieszkac_w(warszawa) :- woli_mieszkac(w_miescie),
 						przeklada_mozliwosci_nad_spokoj.
 
 powinien_mieszkac_w(rzeszow) :- woli_mieszkac(w_miescie),
-							preferuje_dojazd(auto).
+							preferuje_dojazd(auto),
+							\+zalezy_aby_mieszkac(na_zachodzie).
 powinien_mieszkac_w(rzeszow) :- woli_mieszkac(w_miescie),
-							wskazana_bliskosc(gory).
+							wskazana_bliskosc(gory),
+							\+zalezy_aby_mieszkac(na_zachodzie).
 
 powinien_mieszkac_w(zakopane) :- wskazana_bliskosc(gory),
 								pozytywne(nie_przeszkadza_duzy_ruch),

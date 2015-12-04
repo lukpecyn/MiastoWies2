@@ -5,18 +5,19 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.Label;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.border.Border;
 
 import org.jpl7.JPL;
@@ -239,23 +240,27 @@ class MainFrame extends JFrame
 				
 				if(queryResult)
 				{
-					String wynik = "Dobrym miejscem dla Ciebie mo¿e byæ ";
+					String wynik = "";
 					//String wynik = Query.oneSolution(t4).get("X").toString();
 					////System.out.println("first solution of " + t4 + ": X = " + Query.oneSolution(t4).get("X"));
 					//System.out.println("first solution of " + t4 + ": X = " + wynik);
 					//wynikLabel.setText(wynik);
 					Map<String, Term>[] ss4 = Query.allSolutions(t4);
-					//System.out.println("all solutions of " + t4);
+					Set<String> mySet =  Collections.newSetFromMap(new ConcurrentHashMap<String, Boolean>());					
 					for (int i = 0; i < ss4.length; i++) 
 					{
-						//System.out.println("X = " + ss4[i].get("X"));
-						if((i>0) && (i<ss4.length-1)) 
-							wynik = wynik + ", ";
-						else if((i>0) && (i==ss4.length-1)) 
-							wynik = wynik + " lub ";
-						wynik = wynik + ss4[i].get("X").toString().toUpperCase();
+						mySet.add(ss4[i].get("X").toString().toUpperCase());
 					}
-					wynik = wynik + ".";
+					for (Iterator<String> it = mySet.iterator();it.hasNext();) 
+					{
+						String element = it.next();
+						if(it.hasNext() && wynik.length()>0)
+							wynik = wynik + ", " + element;
+						else if(!it.hasNext() && wynik.length()>0)
+							wynik = wynik + " lub " + element + ".";
+						else wynik = wynik + element;
+					}
+					wynik = "Dobrym miejscem dla Ciebie mo¿e byæ " + wynik;
 					wynikLabel.setText(wynik);
 				}
 				else
